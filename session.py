@@ -47,7 +47,7 @@ class Session():
         else:
             self.student = student
 
-    def remove_student(self student):
+    def remove_student(self):
         """Remove the student attribute and set to None"""
         if not self.is_complete():
             self.student = None
