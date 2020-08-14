@@ -14,7 +14,7 @@ class Session():
         student (Student) - the student of the 1-on-1 session
         tutor (Tutor) - the tutor of the session
         timeslot (TimeSlot) - when the session takes place
-
+        subject (str) - subject to focus on
     """
 
     def __init__(self, tutor, timeslot):
