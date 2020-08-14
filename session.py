@@ -1,9 +1,3 @@
-from datetime import datetime
-
-from person import Tutor, Student
-from timeslot import TimeSlot
-
-
 class Session():
     """A class to handle tutoring sessions
 
@@ -24,15 +18,39 @@ class Session():
         """Create the session"""
         self.tutor = tutor
         self.timeslot = timeslot
-        self.student = None  # Student is to be added later
+
+        # Add these later
+        self.student = None
+        self.subject = None
 
     def __repr__(self):
         """Return string representation of the session"""
-        return f"<Session at {repr(timeslot)} with Tutor {tutor} and Student {student}>"
+        return f"<Session on {repr(timeslot)} with Tutor {tutor} and Student {student}>"
 
     def __str__(self):
         """Return pretty-printed session description"""
-        
+        return f"{timeslot} with {tutor} and {student} on {subject}."
+
+    def set_subject(self, subject):
+        """Set the subject of the tutoring session"""
+        if subject in self.tutor.subjects:
+            self.subject = subject
+        else:
+            print("Sorry, this subject is not valid.")
+
+    def set_student(self, student):
+        """Sets the student of the session"""
+        if self.is_booked():
+            print("Sorry, this session is already booked.")
+        elif self.is_complete():
+            print("Sorry, this session is over.")
+        else:
+            self.student = student
+
+    def remove_student(self student):
+        """Remove the student attribute and set to None"""
+        if not self.is_complete():
+            self.student = None
 
     def is_booked(self):
         return self.student is not None

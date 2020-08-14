@@ -1,4 +1,3 @@
-from timeslot import TimeSlot
 from session import Session
 
 
@@ -16,7 +15,7 @@ class Person:
         last (str) - last name of the person
         email (str) - person's email
         grade(int) - person's grade level, must 
-            be from 1-12
+            be from 1-13 (13 means adult)
 
         Returns: Person
         """
@@ -27,7 +26,7 @@ class Person:
 
     def __repr__(self):
         """Return string representation of the person"""
-        return f"<Person {self.first_name.title()} {self.last_name.title}>"
+        return f"<Person {self.first_name.title()} {self.last_name.title()}>"
 
     def __str__(self):
         """Return person's name"""
@@ -51,13 +50,13 @@ class Tutor(Person):
         email (str)
         grade (int) - grade level for tutor (must be 
             9 or above)
-        timeslots (list) - list of available time
-            slots, each item must be of the type
-            TimeSlot.
+        sessions (list) - sessions tutor is available for
+        subjects (list) - list of subjects the tutor
+            is willing to tutor in
     
     """
 
-    def __init__(self, first, last, email, grade):
+    def __init__(self, first, last, email, grade, subjects):
         """Initialize the tutor object
         
         Store name, email and grade information for
@@ -68,17 +67,21 @@ class Tutor(Person):
         last (str) - last name of the tutor
         email (str) - tutor's email
         grade(int) - tutor's grade level, must 
-            be from 1-12
+            be from 1-12, 13 means adult
+        subjects (list) - subjects tutor is 
+            willing to teach
 
         Returns: Tutor
         """
         super().__init__(first, last, email, grade)
         # Add sessions later
         self.sessions = []
+        # Add subjects
+        self.subjects = subjects
 
     def __repr__(self):
         """Return string representation of the object"""
-        return f"<Tutor {self.first_name.title()} {self.last_name.title}>"
+        return f"<Tutor {self.first_name.title()} {self.last_name.title()}>"
 
     def add_session(self, timeslot):
         """Add a session to the list with the given timeslot"""
@@ -87,8 +90,10 @@ class Tutor(Person):
 
     def remove_session(self, session):
         """Remove the session from the list"""
-        pass
-        
+        if session in self.sessions:
+            self.sessions.remove(session)
+        else:
+            print("Sorry, you can't remove that session.")  
 
 
 class Student(Person):
@@ -122,13 +127,14 @@ class Student(Person):
         super().__init__(first, last, email, grade)
         self.sessions = []
 
+    def __repr__(self):
+        """Return string representation of student"""
+        return f"<Student {str(self)}>"
+
     def book_session(self, session):
         """Set student attribute in given session and add to our list"""
-        if session.student is None and not session.is_complete():
-            session.student = self
-            self.sessions.append(session)
-        else:
-            print("This session is already booked.")
+        session.set_student(self)
+        self.sessions.append(session)
 
     def unbook_session(self, session):
         """Remove student attribute from session
@@ -137,9 +143,6 @@ class Student(Person):
         the student does not clear a session that is not
         theirs
         """
-        if session.student == self and session in self.sessions and not session.is_complete():
-            confirm = input("Are you sure you want to unbook this session? (y/n) ")
-            if confirm.lower().startswith("y"):
-                session.student = None
-        else:
-            print("You can't unbook this session.")
+        confirm = input("Are you sure you want to unbook this session? (y/n) ")
+        if confirm.lower().startswith("y"):
+            session.remove_student()
