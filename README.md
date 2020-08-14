@@ -4,7 +4,7 @@ This program connects volunteer tutors with struggling students. Tutor Getter wa
 ## Getting Started
 Clone the repo by entering the following command into the command line:
 ```bash
-git clone https://github.com/rohansatapathy/tutor-getter/
+git clone https://github.com/rohansatapathy/tutor-getter.git
 ```
 ## Running the Program
 The file `demos.py` contains two demonstration examples that show the working of the app from the student and tutor perspective. To run the student version, run the command
