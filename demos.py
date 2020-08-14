@@ -131,7 +131,92 @@ def run_student_demo():
 
 def run_tutor_demo():
     """Run the demo from the tutor's POV"""
-    pass
+    # Create the tutor and some fake data
+    tutor = Tutor("Test", "Tutor", "testtutor@example.com", 13, ["Math", "Science"])
+
+    # Create some fake time slots
+    timeslots = []
+    for start_hour in range(16, 20):
+        ts_start = datetime(2020, 9, 1, start_hour, 0, 0)
+        ts_end = datetime(2020, 9, 1, start_hour+1, 0, 0)
+        timeslots.append(TimeSlot(ts_start, ts_end))
+
+    # Add the time slots to the tutor (as an example, this would be empty at first)
+    for ts in timeslots:
+        tutor.add_session(ts)
+
+    # Fill some of the time slots (as an example, this would be empty at first)
+    students = [Student("Ryan", "Choi", "ryan@example.com", 5), Student("Eliza", "Knox", "eliza@example.com", 7)]
+    students[0].book_session(tutor.sessions[0], "Science")
+    students[1].book_session(tutor.sessions[3], "Math")
+
+    # Define the menus
+    actions_menu = [
+        "Add Session", 
+        "Remove Session", 
+        "See Booked Sessions", 
+        "See Free Sessions", 
+        "Exit"
+    ]
+    while True:
+        action = get_option(actions_menu)
+        if action == actions_menu[0]:
+            # Add a session
+            # Ask for data about the session
+            session_data = {}
+            for data in ["year", "month", "day", "hour", "minute"]:
+                ans = ""
+                while not ans.isdigit():
+                    ans = input(f"Enter session {data}: ")
+                session_data[data] = int(ans)
+
+            # Create the datetime objects and timeslot
+            start = datetime(
+                session_data["year"], 
+                session_data["month"], 
+                session_data["day"], 
+                session_data["hour"], 
+                session_data["minute"]
+            )
+            end = datetime(
+                session_data["year"], 
+                session_data["month"], 
+                session_data["day"], 
+                session_data["hour"]+1, 
+                session_data["minute"]
+            )
+            timeslot = TimeSlot(start, end)
+
+            # Get conformation, then create the session
+            session = Session(tutor, timeslot)  # Throwaway session
+            confirm = input(f"You are about to create {session}.\nConfirm? (y/n) ").lower().startswith("y")
+            if confirm:
+                tutor.add_session(timeslot)
+                print("Success!")
+            else:
+                print("No session created.")
+        elif action == actions_menu[1]:
+            # Remove a session
+            session = get_option(tutor.get_free_sessions(), title="Which session would you like to remove?")
+            # Confirmation
+            confirm = input(f"You are about to delete {session}.\nConfirm? (y/n) ").lower().startswith("y")
+            if confirm:
+                tutor.remove_session(session)
+                print("Session removed.")
+            else:
+                print("No session removed.")
+        elif action == actions_menu[2]:
+            # See booked sessions
+            print("\nYour booked sessions:")
+            for session in tutor.get_booked_sessions():
+                print(session)
+        elif action == actions_menu[3]:
+            # See unbooked sessions
+            print("\nYour unbooked sessions: ")
+            for session in tutor.get_free_sessions():
+                print(session)
+        elif action == actions_menu[4]:
+            sys.exit()
 
 
 if __name__ == "__main__":

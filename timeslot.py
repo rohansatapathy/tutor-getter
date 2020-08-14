@@ -20,12 +20,12 @@ class TimeSlot:
 
     def __repr__(self):
         """Return full string representation of time slot"""
-        start_str = self.start_time.strftime("%b %d, %Y %H:%M:%S %p")
-        end_str = self.end_time.strftime("%b %d, %Y %H:%M:%S %p")
+        start_str = self.start_time.strftime("%b %d, %Y %I:%M:%S %p")
+        end_str = self.end_time.strftime("%b %d, %Y %I:%M:%S %p")
         return f"<TimeSlot {start_str} - {end_str}>"
 
     def __str__(self):
         """Return string representation of time slot"""
-        start_str = self.start_time.strftime("%b %d %H:%M %p")
-        end_str = self.end_time.strftime("%H:%M %p")
+        start_str = self.start_time.strftime("%b %d %I:%M %p")
+        end_str = self.end_time.strftime("%I:%M %p")
         return f"{start_str} - {end_str}"
