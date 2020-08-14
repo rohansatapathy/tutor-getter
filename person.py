@@ -93,7 +93,15 @@ class Tutor(Person):
         if session in self.sessions:
             self.sessions.remove(session)
         else:
-            print("Sorry, you can't remove that session.")  
+            print("Sorry, you can't remove that session.")
+
+    def get_free_sessions(self):
+        """Return list of unbooked sessions"""
+        return [session for session in self.sessions if not session.is_booked()]
+
+    def get_booked_sessions(self):
+        """Return list of booked sessions"""
+        return [session for session in self.sessions if session.is_booked()]
 
 
 class Student(Person):
@@ -131,9 +139,10 @@ class Student(Person):
         """Return string representation of student"""
         return f"<Student {str(self)}>"
 
-    def book_session(self, session):
+    def book_session(self, session, subject):
         """Set student attribute in given session and add to our list"""
         session.set_student(self)
+        session.set_subject(subject)
         self.sessions.append(session)
 
     def unbook_session(self, session):
@@ -144,5 +153,11 @@ class Student(Person):
         theirs
         """
         confirm = input("Are you sure you want to unbook this session? (y/n) ")
-        if confirm.lower().startswith("y"):
+        if confirm.lower().startswith("y") and session in self.sessions:
             session.remove_student()
+            session.remove_subject()
+            self.sessions.remove(session)
+
+    def get_upcoming_sessions(self):
+        """Return list of all future sessions"""
+        return [session for session in self.sessions if not session.is_complete()]
